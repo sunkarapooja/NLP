@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI/ML Survey</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            background-color: #010A29; /* Updated background color */
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #fff;
+        }
+
+        h2 {
+            color: #333;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 10px;
+            font-size: 16px;
+            font-weight: bold;
+        }
+
+        select {
+            margin-bottom: 20px;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        button {
+            display: block;
+            margin: 0 auto;
+            padding: 15px;
+            background-color: #5C78D8;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        .range-question {
+            display: block;
+        }
+
+        .range-question.hidden {
+            display: none;
+        }
+
+        form {
+            max-width: 600px;
+            margin: 20px auto; /* Adjusted margin for centering */
+            background-color: #5C78D8;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+        }
+
+        #logo {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            max-width: 300px;
+            max-height: 300px;
+        }
+    </style>
+</head>
+<body>
+   
+    <img id="logo" src="{{ url_for('static', filename='images/logo.jpg') }}" alt="Logo">
+
+
+    <h1>GenAI Survey Report</h1>
+
+    <form id="aiSurveyForm" action="http://localhost:8000/submit_survey">
+        <label>1. Do you already have existing traditional AI/ML use cases in Production? Please Write 'Yes' or 'No'</label>
+        <select id="q1" onchange="toggleRange()">
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select>
+
+        <label class="range-question">2. If "Yes" , Please select the range out of 5</label>
+        <select id="q2">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+
+        <label>3. Have you implemented ModelOps/MLOps in your organisation? Please Write 'Yes' or 'No'?</label>
+        <select id="q3">
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select>
+
+        <label class="range-question">4. How big is your current AI/ML team? If "Yes" , Please select the range out of 5</label>
+        <select id="q4">
+            <option value="0">0</option>
+            <option value="1">1</option>
+            <option value="2">2</option>
+            <option value="3">3</option>
+            <option value="4">4</option>
+            <option value="5">5</option>
+        </select>
+
+        <label>5. Is your organisation made or planning to make investments in GenAI? Please Write 'Yes' or 'No'?</label>
+        <select id="q5">
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select>
+
+        <label>6. Have you identified the business areas or use cases within which GenAI can help you? Please Write 'Yes' or 'No'?</label>
+        <select id="q6">
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select>
+
+        <label>7. Have you identified a platform for your GenAI? Please Write 'Yes' or 'No'?</label>
+        <select id="q7">
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select>
+
+        <label>8. Do you have any GenAI models in Pilot phase? Please Write 'Yes' or 'No'?</label>
+        <select id="q8">
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select>
+
+        <label>9. If you worked on pilots and models, do you have any GenAI models in Prod? Please Write 'Yes' or 'No'?</label>
+        <select id="q9">
+            <option value="Yes">Yes</option>
+            <option value="No">No</option>
+        </select>
+
+        <script>
+            function toggleRange() {
+                var yesNoSelect = document.getElementById("q1");
+                var rangeQuestion = document.getElementsByClassName("range-question")[0];
+
+                if (yesNoSelect.value === "Yes") {
+                    rangeQuestion.classList.add("hidden");
+                } else {
+                    rangeQuestion.classList.remove("hidden");
+                }
+            }
+
+            function submitSurvey() {
+                var surveyData = {
+                    q1: document.getElementById("q1").value,
+                    q2: document.getElementById("q2").value,
+                    q3: document.getElementById("q3").value,
+                    q4: document.getElementById("q4").value,
+                    q5: document.getElementById("q5").value,
+                    q6: document.getElementById("q6").value,
+                    q7: document.getElementById("q7").value,
+                    q8: document.getElementById("q8").value,
+                    q9: document.getElementById("q9").value
+                };
+
+                fetch('/submit_survey', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(surveyData),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            }
+        </script>
+      <button type="button" onclick="submitSurvey()">Submit Survey</button>
+    </form>
+
+
+        <!-- <button type="button" onclick="submitSurvey()">Submit Survey</button> -->
+
+        <script>
+            function toggleRange() {
+                var yesNoSelect = document.getElementById("q1");
+                var rangeQuestion = document.getElementsByClassName("range-question")[0];
+
+                if (yesNoSelect.value === "Yes") {
+                    rangeQuestion.classList.add("hidden");
+                } else {
+                    rangeQuestion.classList.remove("hidden");
+                }
+            }
+
+            function submitSurvey() {
+                var surveyData = {
+                    q1: document.getElementById("q1").value,
+                    q2: document.getElementById("q2").value,
+                    q3: document.getElementById("q3").value,
+                    q4: document.getElementById("q4").value,
+                    q5: document.getElementById("q5").value,
+                    q6: document.getElementById("q6").value,
+                    q7: document.getElementById("q7").value,
+                    q8: document.getElementById("q8").value,
+                    q9: document.getElementById("q9").value
+                };
+
+                fetch('/submit_survey', {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                    body: JSON.stringify(surveyData),
+                })
+                .then(response => response.json())
+                .then(data => {
+                    console.log('Success:', data);
+                    document.body.innerHTML = data.report_html;
+                })
+                .catch((error) => {
+                    console.error('Error:', error);
+                });
+            }
+        </script>
+
+    </form>
+
+</body>
+</html>
